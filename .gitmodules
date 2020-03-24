@@ -1,0 +1,3 @@
+[submodule "schematics"]
+	path = schematics
+	url = git@github.com:DocSneider/AOWF-schematics.git
