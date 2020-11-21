@@ -32,11 +32,11 @@ function show_runtime () {
 #create dumbs
 	printf "\n\n\n ***** +++++ ***** creating dump-files ***** +++++ *****\n"
 	printf "SPI-Clamp:\tPowerON\n"; gpio mode 2 out; gpio write 2 0; sleep 2; gpio write 2 1; sleep 1 #Powering ON SPI_header-VCC
-	flashrom -p linux_spi:dev=/dev/spidev0.0,spispeed=1000 -c GD25Q128C -V -r "${file}Nr01.bin"
+	flashrom -p linux_spi:dev=/dev/spidev0.0,spispeed=1000 -V -r "${file}Nr01.bin"
 	check_error
 	#2nd dump-file
 	gpio write 2 0; sleep 2; gpio write 2 1; sleep 1 #Powering ON SPI_header-VCC
-	flashrom -p linux_spi:dev=/dev/spidev0.0,spispeed=1000 -c GD25Q128C -V -r "${file}Nr02.bin"
+	flashrom -p linux_spi:dev=/dev/spidev0.0,spispeed=1000 -V -r "${file}Nr02.bin"
 
 #compare dumps
 	hash1=$(md5sum "${file}Nr01.bin" | cut -f1 -d" ") # only get the hash value
@@ -62,7 +62,7 @@ function show_runtime () {
 
 #flash file
 	printf "\n\n\n ***** +++++ ***** flashing patched file ... ***** +++++ ***** \n"
-	flashrom --noverify -p linux_spi:dev=/dev/spidev0.0,spispeed=1000 -c GD25Q128C -V -w "${file}Nr01.bin.patched"
+	flashrom --noverify -p linux_spi:dev=/dev/spidev0.0,spispeed=1000 -V -w "${file}Nr01.bin.patched"
 	check_error
 	printf "\n\n\n ***** +++++ ***** device succesfully patched! ***** +++++ *****\n"
 	gpio write 2 0; printf "\nSPI-Clamp: PowerOFF\n"

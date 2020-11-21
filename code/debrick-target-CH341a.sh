@@ -35,10 +35,10 @@ function show_runtime () {
 
 #create 2 dumbs
 	printf "\n***** +++++ ***** creating dump-files ***** +++++ *****\n"
-	flashrom -p ch341a_spi -c GD25Q127C/GD25Q128C -V -r "${file}Nr01.bin"
+	flashrom -p ch341a_spi -V -r "${file}Nr01.bin"
 	check_error; show_runtime
 	#2nd dump-file
-	flashrom -p ch341a_spi -c GD25Q127C/GD25Q128C -V -r "${file}Nr02.bin"
+	flashrom -p ch341a_spi -V -r "${file}Nr02.bin"
 	check_error; show_runtime
 	
 #compare dumps
@@ -63,7 +63,7 @@ function show_runtime () {
 
 #flash file
 	printf "\n\n\n ***** +++++ ***** flashing patched file ... ***** +++++ ***** \n"
-	flashrom -p ch341a_spi -c GD25Q127C/GD25Q128C -V -w "${file}Nr01.bin.patched"
+	flashrom -p ch341a_spi -V -w "${file}Nr01.bin.patched"
 	check_error
 	printf "\n\n\n ***** +++++ ***** device succesfully patched! ***** +++++ *****\n"
 

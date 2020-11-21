@@ -43,7 +43,7 @@ function show_runtime () {
 
 #flash file
 	printf "\n\n\n ***** +++++ ***** flashing patched file ... ***** +++++ ***** \n"
-	flashrom -p ch341a_spi -c GD25Q127C/GD25Q128C -V -w "${backup_file}.patched"
+	flashrom -p ch341a_spi -V -w "${backup_file}.patched"
 	check_error
 	printf "\n\n\n ***** +++++ ***** device succesfully patched! ***** +++++ *****\n"
 
