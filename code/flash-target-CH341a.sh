@@ -27,12 +27,11 @@ function show_runtime () {
 	mkdir -p "bkps/${timestamp}"; cd "bkps/${timestamp}"; file="${timestamp}_dev-dump"
 
 #create dumbs
-	printf "\n\n\n ***** +++++ ***** creating dump-files ***** +++++ *****\n"
+	printf "\n\n\n ***** +++++ ***** creating dump-files ***** +++++ *****\n\n\n"
 	flashrom -p ch341a_spi -V -r "${file}Nr01.bin"
 	check_error
 	show_runtime
 	#2nd dump-file
-	gpio write 2 0; sleep 2; gpio write 2 1; sleep 1 #Powering ON SPI_header-VCC
 	flashrom -p ch341a_spi -V -r "${file}Nr02.bin"
 	show_runtime
 	
@@ -40,16 +39,18 @@ function show_runtime () {
 	dump_hash1=$(md5sum "${file}Nr01.bin" | cut -f1 -d" ") # only get the hash value
 	dump_hash2=$(md5sum "${file}Nr02.bin" | cut -f1 -d" ")
 	if [ "${dump_hash1}" = "${dump_hash2}" ]; then
-		printf "hashs are identical - continue...\n"
+		printf "hashs are identical - continue...\n\n"
 	else
-		printf "ERROR: dumping flash content --> md5sum´s doesn´t match - please check connection & retry.\n"
+		printf "ERROR: dumping flash content --> md5sum´s doesn´t match - please check connection & retry.\n\n"
 		exit_error
 	fi
 
 #patch file
+	printf "\n\n\n ***** +++++ ***** patching file & getting OpenWrt sysupgrade file ... ***** +++++ ***** \n"
 	#enable bootdelay
 		sed 's/\x62\x6F\x6F\x74\x64\x65\x6C\x61\x79\x00\x00\x00\x6F\x66\x66/\x62\x6F\x6F\x74\x64\x65\x6C\x61\x79\x00\x00\x00\x00\x00\x35/g' "${file}Nr01.bin" > "${file}Nr01.bin.patched"
 	#get the sysupgrade file
+		printf "\nGetting sysupgrade-file...\n\n"
 		sysupgrade_file="openwrt-ramips-mt7621-xiaomi_mir3g-v2-squashfs-sysupgrade.bin"
 		wget "https://downloads.openwrt.org/snapshots/targets/ramips/mt7621/${sysupgrade_file}"
 		su_hash1=$(curl -s https://downloads.openwrt.org/snapshots/targets/ramips/mt7621/sha256sums | grep ${sysupgrade_file} | cut -f1 -d" ")
